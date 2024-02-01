@@ -17,7 +17,8 @@ class TaskListView(View):
         qs=Task.objects.all()
         return render (request,"task_list.html",{"data":qs})
     
-
+# lh:8000/tasks/add/
+# method:get/post
 class TaskCreateView(View):
     def get(self,request,*args,**kwargs):
         form=TaskForm()
@@ -29,4 +30,45 @@ class TaskCreateView(View):
             form.save()
             return redirect("task-list")
         else:
-            return render(request,"task-add",{"form":form})
+            return render(request,"task_add.html",{"form":form})
+
+# lh:8000/tasks/pk/
+# method:get       
+class TaskDetailView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        qs=Task.objects.get(id=id)
+        return render (request,"task_detail.html",{"data":qs})
+
+# task delete view   
+# lh:8000/tasks/pk/delete
+# method:get
+class TaskDeleteView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        qs=Task.objects.filter(id=id).delete()
+        return redirect("task-list")
+
+# taskupdateview
+# lh:8000/tasks/pk/update/
+# method:get
+class TaskUpdateView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        task_object=Task.objects.get(id=id)
+        form=TaskForm(instance=task_object)
+        return render(request,"task_edit.html",{"form":form})
+    
+    def post(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        task_object=Task.objects.get(id=id)
+        data=request.POST
+        form=TaskForm(data,instance=task_object)
+        if form.is_valid():
+            form.save()
+            return redirect("task-list")
+        else:
+            return render(request,"task_add.html",{"form":form})
+
+
+ 

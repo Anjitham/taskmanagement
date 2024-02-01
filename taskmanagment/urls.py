@@ -22,4 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("tasks/all/",views.TaskListView.as_view(),name="task-list"),
     path("tasks/add/",views.TaskCreateView.as_view(),name="task-create"),
+    path("tasks/<int:pk>/",views.TaskDetailView.as_view(),name="task-detail"),
+    path("tasks/<int:pk>/delete/",views.TaskDeleteView.as_view(),name="task-delete"),
+    path("tasks/<int:pk>/change",views.TaskUpdateView.as_view(),name="task-edit")
 ]
